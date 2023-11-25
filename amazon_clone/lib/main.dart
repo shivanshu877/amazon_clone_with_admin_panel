@@ -1,6 +1,7 @@
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone/features/auth/services/auth_service.dart';
+import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:amazon_clone/router.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final AuthService authService = AuthService();
   // This widget is the root of your application.
   @override
   void initState() {
-    final AuthService authService = AuthService();
+    authService.getUserData(context);
     super.initState();
   }
 
@@ -44,7 +46,9 @@ class _MyAppState extends State<MyApp> {
             const ColorScheme.light(primary: GlobalVariables.secondaryColor),
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: const AuthScreen(),
+      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
+          ? const HomeScreen()
+          : const AuthScreen(),
     );
   }
 }
