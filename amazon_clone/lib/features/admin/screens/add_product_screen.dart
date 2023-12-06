@@ -4,6 +4,7 @@ import 'package:amazon_clone/common/custom_button.dart';
 import 'package:amazon_clone/common/custom_textfield.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
+import 'package:amazon_clone/features/admin/screens/posts_screen.dart';
 import 'package:amazon_clone/features/admin/services/admin_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -24,6 +25,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController priceController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   final AdminServices adminServices = AdminServices();
+  PostsScreen postscreen = PostsScreen();
   List<String> productCategories = [
     'Mobile',
     'Essentials',
@@ -32,7 +34,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Fashion'
   ];
   final addProductFormKey = GlobalKey<FormState>();
-
+  PostsScreen post = PostsScreen();
   void sellProduct() {
     if (addProductFormKey.currentState!.validate() && images.isNotEmpty) {
       adminServices.sellProduct(
@@ -42,7 +44,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           price: double.parse(priceController.text),
           quantity: double.parse(quantityController.text),
           category: categories,
-          images: images);
+          images: images,
+          onSuccess: () {});
     }
   }
 
