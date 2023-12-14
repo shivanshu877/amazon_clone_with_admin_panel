@@ -1,6 +1,6 @@
 const express = require("express");
 const productRouter = express.Router();
-const Product = require("../models/product");
+const { Product } = require("../models/product");
 const auth = require("../middlewares/auth");
 
 productRouter.get("/api/products", auth, async (req, res) => {
@@ -47,6 +47,25 @@ productRouter.post("/api/rate-product", auth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+  productRouter.get("/api/deal-of-day", auth, async (req, res) => {
+    try {
+      let products = await Product.find({});
+      products = products.sort((a, b) => {
+        let sum1 = 0;
+        let sum2 = 0;
+        for (let i = 0; i < a.ratings.length; i++) {
+          sum1 += a.rating[i].rating;
+        }
+        for (let i = 0; i < b.ratings.length; i++) {
+          sum2 += b.rating[i].rating;
+        }
+        return sum1 < sum2 ? 1 : -1;
+      });
+      res.json(products[0]);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 });
 
 module.exports = productRouter;
