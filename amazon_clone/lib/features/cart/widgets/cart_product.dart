@@ -1,3 +1,4 @@
+import 'package:amazon_clone/features/cart/services/delete_from_cart.dart';
 import 'package:amazon_clone/features/product_details/services/product_details_services.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:amazon_clone/provider/user_provider.dart';
@@ -14,8 +15,15 @@ class CartProduct extends StatefulWidget {
 
 class _CartProductState extends State<CartProduct> {
   ProductDetailsServices services = ProductDetailsServices();
+  cartServices servicesCart = cartServices();
   void increaseQuantity(Product product) {
     services.addToCart(context: context, product: product);
+    setState(() {});
+  }
+
+  void decreaseQuantity(Product product) {
+    servicesCart.deleteFromCart(context: context, product: product);
+    setState(() {});
   }
 
   @override
@@ -96,13 +104,16 @@ class _CartProductState extends State<CartProduct> {
                 ),
                 child: Row(
                   children: [
-                    Container(
-                      width: 35,
-                      height: 32,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.remove,
-                        size: 18,
+                    InkWell(
+                      onTap: () => decreaseQuantity(product),
+                      child: Container(
+                        width: 35,
+                        height: 32,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.remove,
+                          size: 18,
+                        ),
                       ),
                     ),
                     DecoratedBox(
